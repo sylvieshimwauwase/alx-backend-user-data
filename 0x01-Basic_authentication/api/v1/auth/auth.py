@@ -28,3 +28,8 @@ class Auth():
     def current_user(self, request=None) -> T:
         """current_user"""
         return None
+
+
+class BasicAuth(Auth):
+    """defining BasicAuth class"""
+    pass

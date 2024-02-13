@@ -12,6 +12,13 @@ import os
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+auth = None
+if os.getenv('AUTH_TYPE') == 'auth':
+    from api.v1.auth.auth import Auth
+    auth = Auth()
+elif os.getenv('AUTH_TYPE') == 'basic_auth':
+    from api.v1.auth.basic_auth import BasicAuth
+    auth = BasicAuth()
 
 
 @app.errorhandler(404)
@@ -34,17 +41,17 @@ def forbidden(error) -> str:
 
 
 @app.before_request
-def handle_before_request():
-    auth = None
+def before_request() -> None:
+    """Before request handler"""
     allowed_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if auth is None:
-        return
+    if not auth:
+        return None
     if request.path not in allowed_paths:
-        if not auth.require_auth(request):
-            return
-    if auth.authorization_header(request) is None:
+        if not auth.require_auth(request.path, allowed_paths):
+            return None
+    if not auth.authorization_header(request):
         abort(401)
-    if auth.current_user(request) is None:
+    if not auth.current_user(request):
         abort(403)
 
 

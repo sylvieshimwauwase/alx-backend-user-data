@@ -5,6 +5,7 @@ from flask import request
 
 T = TypeVar('T')
 
+
 class Auth():
     """defining Auth class"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:

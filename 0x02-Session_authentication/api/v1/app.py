@@ -4,6 +4,7 @@ Route module for the API
 """
 from os import getenv
 from api.v1.views import app_views
+from api.v1.auth import auth
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
@@ -43,16 +44,7 @@ def forbidden(error) -> str:
 @app.before_request
 def before_request() -> None:
     """Before request handler"""
-    paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if not auth:
-        return None
-    if request.path not in paths:
-        if not auth.require_auth(request.path, paths):
-            return None
-    if not auth.authorization_header(request):
-        abort(401)
-    if not auth.current_user(request):
-        abort(403)
+    request.current_user = auth.current_user(request)
 
 
 if __name__ == "__main__":

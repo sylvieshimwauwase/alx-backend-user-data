@@ -14,8 +14,8 @@ class SessionAuth(Auth):
         """creates a session"""
         if user_id is None or not isinstance(user_id, str):
             return None
-        session_id = str(uuid.uuid4())
+        session_id = uuid4()
 
-        self.User_id_by_session_id[session_id] = user_id
+        self.User_id_by_session_id[str(session_id)] = user_id
 
-        return session_id
+        return str(session_id)

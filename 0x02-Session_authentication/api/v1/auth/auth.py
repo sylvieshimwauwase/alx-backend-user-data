@@ -29,7 +29,7 @@ class Auth():
     def current_user(self, request=None) -> T:
         """current_user"""
         return None
-    
+
     def session_cookie(self, request=None):
         """session_cookie"""
         if request is None:

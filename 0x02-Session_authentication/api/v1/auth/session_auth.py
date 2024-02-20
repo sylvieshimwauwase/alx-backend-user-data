@@ -34,5 +34,7 @@ class SessionAuth(Auth):
         if session_id:
             user_id = self.user_id_for_session_id(session_id)
             if user_id:
-                return User.get(user_id)
+                user = User.get(user_id)
+                if user:
+                    return user
         return None

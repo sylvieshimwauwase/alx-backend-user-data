@@ -47,7 +47,8 @@ def forbidden(error) -> str:
 @app.before_request
 def before_request() -> None:
     """Before request handler"""
-    paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/',
+             '/api/v1/auth_session/login/']
     if not auth:
         return None
     if request.path not in paths:

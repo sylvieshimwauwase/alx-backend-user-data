@@ -2,7 +2,7 @@
 """creating a session authentication module"""
 
 from api.v1.auth.auth import Auth
-import uuid
+from uuid import uuid4
 
 
 class SessionAuth(Auth):

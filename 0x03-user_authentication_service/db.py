@@ -30,13 +30,10 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add user"""
+        if not email or not hashed_password:
+            return
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-
-        try:
-            self._session.commit()
-
-        except IntegrityError:
-            self._session.rollback()
-            raise
+        session = self._session
+        session.add(user)
+        session.commit()
         return user

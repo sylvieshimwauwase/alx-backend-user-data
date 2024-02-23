@@ -3,7 +3,6 @@
 
 from user import Base, User
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session
 from sqlalchemy import create_engine
 
 
@@ -31,10 +30,10 @@ class DB:
         """Add user"""
         if not email or not hashed_password:
             raise ValueError("Email and hashed_password are required.")
-        
+
         user = User(email=email, hashed_password=hashed_password)
         session = self._session
         session.add(user)
         session.commit()
-        
+
         return user

@@ -49,17 +49,7 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """Find user by"""
-        if not kwargs:
-            raise InvalidRequestError("kwargs must not be empty")
-
-        for k in kwargs:
-            if k not in DATA:
-                raise InvalidRequestError(f"Unknown filter: {k}")
-
-        user = None
-        try:
-            user = self._session.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
-            pass
-
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if user is None:
+            raise NoResultFound
         return user

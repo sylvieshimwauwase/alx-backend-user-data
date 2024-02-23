@@ -3,7 +3,10 @@
 
 from user import Base, User
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 import logging
 
 DATA = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
@@ -41,5 +44,22 @@ class DB:
         session = self._session
         session.add(user)
         session.commit()
+
+        return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """Find user by"""
+        if not kwargs:
+            raise InvalidRequestError("kwargs must not be empty")
+
+        for k in kwargs:
+            if k not in DATA:
+                raise InvalidRequestError(f"Unknown filter: {k}")
+
+        user = None
+        try:
+            user = self._session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            pass
 
         return user

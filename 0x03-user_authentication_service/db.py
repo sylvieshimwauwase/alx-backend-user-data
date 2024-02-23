@@ -4,6 +4,12 @@
 from user import Base, User
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+import logging
+
+DATA = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy').setLevel(logging.WARNING)
 
 
 class DB:

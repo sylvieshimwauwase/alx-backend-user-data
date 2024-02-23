@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """db module"""
 
-from sqlalchemy.exc import IntegrityError
 from user import Base, User
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -11,7 +10,7 @@ from sqlalchemy import create_engine
 class DB:
     """DB class"""
 
-    def __init__(self) -> None:
+    def __init__(self):
         """Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///a.db", echo=True)
@@ -20,7 +19,7 @@ class DB:
         self.__session = None
 
     @property
-    def _session(self) -> Session:
+    def _session(self):
         """Memoized session object
         """
         if self.__session is None:
@@ -31,9 +30,11 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add user"""
         if not email or not hashed_password:
-            return
+            raise ValueError("Email and hashed_password are required.")
+        
         user = User(email=email, hashed_password=hashed_password)
         session = self._session
         session.add(user)
         session.commit()
+        
         return user
